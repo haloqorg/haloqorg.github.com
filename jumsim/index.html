@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link href='http://fonts.googleapis.com/css?family=Quattrocento+Sans:700' rel='stylesheet' type='text/css'>
+<link href="http://fonts.googleapis.com/earlyaccess/nanumgothic.css" rel="stylesheet" type="text/css">
+<title>
+점심 뭐먹지?
+</title>
+<style>
+	* { box-sizing: border-box; }
+	li, ul { padding: 0; margin:0; }
+	input {
+		margin: 4px 0;
+		font-family: Arial, sans-serif;
+		font-size: 96px;
+		padding: 5px 4px 4px;
+		height: 128px;
+		width: 750px;
+	}
+	#body {
+		color:#444;
+		font-family:"Quattrocento Sans","Helvetica Neue",Helvetica,"Apple SD Gothic Neo",NanumGothic,"Malgun Gothic",Arial,Dotum,sans-serif;
+		margin: 50px 0;
+		font-size: 24px;
+	}
+	#slot li {
+		font-family: Arial, sans-serif;
+		font-size: 96px;
+		padding: 6px 4px 6px 6px;
+		line-height: normal;
+		height: 128px;
+		overflow: hidden;
+	}
+	#slot_wrapper {
+		position: relative;
+	}
+	.jSlots-wrapper {
+		margin: 4px 0;
+    	overflow: hidden; /* to hide the magic */
+    	height: 128px; /* whatever the height of your list items are */
+    	width: 700px;
+    	position: absolute;
+    	top: 0px;
+    	display: none;
+	}
+	#slot {
+		display: none;
+	}
+</style>
+
+<div id="body">
+자신의 운명을 스스로 결정해야 하고 수많은 선택이 있는 현대사회가 만들어내는 <b>“결정장애”</b> <br/>
+점심은 우리가 매일 선택해야 하는 것 중 극히 일부입니다. <br/>
+<p><b><u>점심 메뉴를 고민하지 맙시다!</u></b></p>
+<div id="slot_wrapper">
+    <input type="text" class="search">
+    <ul id="slot">
+    	<!-- Initial list needs the height it will have when filled for jSlots to run correctly. You could fill with real values instead -->
+    	<li>test</li><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li>
+    </ul>
+</div>
+<button style="height:64px;width:750px;font-size:24px;" type="button" id="random_location">우물쭈물 하지 말고 누르라!</button>
+<p>추가하고 싶은 메뉴는 아래에 적어주세요.</p>
+</div>
+<!-- disqus -->
+	<div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'jumsim'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>    
+<!-- disqus -->
+
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+<script src="jquery.jSlots.js"></script>
+<script>
+
+$(function() {
+	var menus = [
+			{ name: "김치찌개" },
+			{ name: "부대찌개" },
+			{ name: "돈가스" },
+			{ name: "국수" },
+			{ name: "순대국밥" },
+			{ name: "김밥" },
+			{ name: "라면" },
+			{ name: "자장면" },
+			{ name: "짬뽕" },
+			{ name: "편의점" },
+			{ name: "도시락" },
+			{ name: "단골집!" },
+			{ name: "신입사원의 선택!" },
+			{ name: "백반" },
+			{ name: "된장찌개" },
+			{ name: "비빔밥" },
+			{ name: "불고기" },
+			{ name: "순두부찌개" },
+			{ name: "초밥" },
+			{ name: "떡볶이" },
+			{ name: "생선가스" },
+			{ name: "상사의 선택!" },
+			{ name: "오므라이스" },
+			{ name: "만두국" },
+			{ name: "볶음밥" },
+			{ name: "감자탕" },
+			{ name: "된장국" },
+			{ name: "마파두부" },
+			{ name: "샌드위치" },
+			{ name: "냉면" },
+			{ name: "쫄면" },
+			{ name: "잔치국수" },
+			{ name: "모밀국수" },
+			{ name: "뷔페" },
+			{ name: "햄버거" },
+			{ name: "삼겹살" },
+			{ name: "오징어볶음" },
+			{ name: "제육볶음" },
+			{ name: "굶어!!!" },
+			{ name: "생선구이" },
+			{ name: "설렁탕" },
+			{ name: "칼국수" },
+			{ name: "족발" },
+			{ name: "보쌈" },
+			{ name: "꽁보리밥" },
+			{ name: "닭갈비" },
+			{ name: "닭도리탕" },
+			{ name: "콩국수" },
+			{ name: "청국장" },
+			{ name: "죽" },
+			{ name: "대구탕" },
+			{ name: "탕짜면" },
+			{ name: "짬짜면" },
+			{ name: "탕짬면" },
+			{ name: "생태탕" }
+		],
+		$input = $('input'),
+		random_index;
+
+    function makeMenuList(list){
+        if(list.length<100){
+            var index = _.random(menus.length-1);
+            if(list.length===1){
+                random_index = index;
+            }
+            list.push( '<li index='+_.random(menus.length-1)+'>'+menus[index].name+'</li>' );
+            return makeMenuList(list);
+        } else {
+            $input.val('');
+            $('#slot').html(list.join('')).parent().show().trigger('spin');
+            return list;
+        }
+    }
+
+    function makeMenus(){
+        var list = ['<li>'+$input.val()+'</li>'];
+        makeMenuList(list);
+    }
+
+    $('#slot').jSlots({
+        number: 1,
+        spinner : '.jSlots-wrapper',
+        spinEvent: 'spin',
+        time: 10000,
+        loops: 5,
+        endNum: 2,
+        onEnd: function(finalElement){
+            $input.val(menus[random_index].name);
+            //hide spinner
+            $(this.spinner).hide();
+        }
+    });
+
+    //bind random button
+    $('#random_location').on('click', makeMenus);
+});
+
+</script>
